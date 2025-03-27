@@ -6,7 +6,6 @@ import type {
   Context as LambdaContext,
   Handler as LambdaHandler
 } from "aws-lambda";
-import { isAsyncIterable } from "iterall";
 import type { ExecutionResult } from "graphql";
 import { PubSub } from "graphql-subscriptions";
 import type {
@@ -29,6 +28,7 @@ import {
 import { formatMessage } from "./formatMessage";
 import type { ExecutionParams } from "./execute";
 import { execute } from "./execute";
+import { isAsyncIterable } from "./helpers/iterator";
 
 type Options = Pick<
   ApolloServerOptions<any>,

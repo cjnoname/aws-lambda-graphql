@@ -1,16 +1,11 @@
 import type { ExecutionResult } from "graphql";
-import { getAsyncIterator, isAsyncIterable } from "iterall";
 import { ArrayPubSub } from "./ArrayPubSub";
 import { formatMessage } from "./formatMessage";
 import { execute } from "./execute";
 import type { ISubscriptionEvent, IEventProcessor } from "./types";
 import { SERVER_EVENT_TYPES } from "./protocol";
 import type { WebSocketServer } from "./WebSocketServer";
-
-// polyfill Symbol.asyncIterator
-if (Symbol.asyncIterator === undefined) {
-  (Symbol as any).asyncIterator = Symbol.for("asyncIterator");
-}
+import { isAsyncIterable } from "./helpers/iterator";
 
 export type EventProcessorFn = (events: ISubscriptionEvent[], lambdaContext?: any) => Promise<void>;
 
@@ -56,7 +51,7 @@ export class MemoryEventProcessor<TServer extends WebSocketServer = WebSocketSer
                 return Promise.resolve();
               }
 
-              const iterator = getAsyncIterator(iterable);
+              const iterator = iterable[Symbol.asyncIterator]();
               const result: IteratorResult<ExecutionResult> = await iterator.next();
 
               if (result.value != null) {
