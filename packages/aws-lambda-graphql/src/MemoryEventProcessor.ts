@@ -41,7 +41,7 @@ export class MemoryEventProcessor<TServer extends WebSocketServer = WebSocketSer
                 lambdaContext: lambdaContext as any, // we don't have a lambda's context here
                 connection: subscriber.connection,
                 operation: subscriber.operation,
-                pubSub,
+                pubSub: pubSub as any,
                 registerSubscriptions: false
               });
 

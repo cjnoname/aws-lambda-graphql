@@ -32,7 +32,7 @@ export class ArrayPubSub {
     throw new Error("Please do not use this PubSub implementation");
   }
 
-  asyncIterableIterator(eventNames: string | string[]) {
+  asyncIterableIterator(eventNames: string | readonly string[]) {
     const names = Array.isArray(eventNames) ? eventNames : [eventNames];
 
     return createAsyncIterator(

@@ -93,7 +93,7 @@ export class DynamoDBEventProcessor<TServer extends WebSocketServer = WebSocketS
                   // to context from connection.data.context
                   connection: subscriber.connection,
                   operation: subscriber.operation,
-                  pubSub
+                  pubSub: pubSub as any
                 }
               );
 
@@ -106,7 +106,7 @@ export class DynamoDBEventProcessor<TServer extends WebSocketServer = WebSocketS
                 lambdaContext,
                 connection: subscriber.connection,
                 operation: subscriber.operation,
-                pubSub,
+                pubSub: pubSub as any,
                 registerSubscriptions: false
               });
 
