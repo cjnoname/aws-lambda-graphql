@@ -20,18 +20,6 @@ export class ArrayPubSub {
     this.events = events;
   }
 
-  async publish() {
-    throw new Error("ArrayPubSub is read only");
-  }
-
-  async subscribe(): Promise<number> {
-    throw new Error("Please do not use this PubSub implementation");
-  }
-
-  async unsubscribe() {
-    throw new Error("Please do not use this PubSub implementation");
-  }
-
   asyncIterableIterator(eventNames: string | readonly string[]) {
     const names = Array.isArray(eventNames) ? eventNames : [eventNames];
 
