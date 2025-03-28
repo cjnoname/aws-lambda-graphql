@@ -1,3 +1,4 @@
+import { createAsyncIterator } from "iterall";
 import type {
   IConnection,
   ISubscriber,
@@ -5,6 +6,11 @@ import type {
   ISubscriptionManager,
   OperationRequest
 } from "./types";
+
+// polyfill Symbol.asyncIterator
+if (Symbol.asyncIterator === undefined) {
+  (Symbol as any).asyncIterator = Symbol.for("asyncIterator");
+}
 
 interface MemorySubscriptionManagerOptions {
   /**
@@ -44,49 +50,16 @@ export class MemorySubscriptionManager implements ISubscriptionManager {
   subscribersByEvent = (
     event: ISubscriptionEvent
   ): AsyncIterable<ISubscriber[]> & AsyncIterator<ISubscriber[]> => {
-    // Safely get subscribers with better error handling
-    let subscribers: ISubscriber[];
-    try {
-      const name = this.getSubscriptionNameFromEvent(event);
-      const subscriptions = this.subscriptions.get(name) || [];
-      subscribers = subscriptions.filter(subscriber => subscriber.event === name);
-    } catch (error) {
-      // Handle any errors during initialization
-      const iterable = {
-        next: () => Promise.reject(error),
-        return: () => Promise.resolve({ done: true, value: undefined as any }),
-        throw: (e: any) => Promise.reject(e),
-        [Symbol.asyncIterator]: function () {
-          return this;
-        }
-      };
-      return iterable;
-    }
+    return {
+      [Symbol.asyncIterator]: () => {
+        const name = this.getSubscriptionNameFromEvent(event);
+        const subscriptions = this.subscriptions.get(name) || [];
 
-    let done = false;
+        const subscribers = subscriptions.filter(subscriber => subscriber.event === name);
 
-    const iterable = {
-      next: () => {
-        if (done) {
-          return Promise.resolve({ done: true, value: undefined as any });
-        }
-        done = true;
-        return Promise.resolve({ done: false, value: subscribers });
-      },
-      return: () => {
-        done = true;
-        return Promise.resolve({ done: true, value: undefined as any });
-      },
-      throw: (error: any) => {
-        done = true;
-        return Promise.reject(error);
-      },
-      [Symbol.asyncIterator]: function () {
-        return this;
+        return createAsyncIterator([subscribers]);
       }
-    };
-
-    return iterable;
+    } as any;
   };
 
   subscribe = async (

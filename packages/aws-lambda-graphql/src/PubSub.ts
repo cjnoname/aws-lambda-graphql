@@ -66,7 +66,7 @@ export class PubSub {
         }
       }
 
-      return pubSub.asyncIterableIterator(names) as AsyncIterable<any> & AsyncIterator<any>;
+      return pubSub.asyncIterator(names) as AsyncIterable<any> & AsyncIterator<any>;
     };
   };
 

@@ -1,4 +1,5 @@
 import type { GraphQLResolveInfo } from "graphql";
+import { $$asyncIterator } from "iterall";
 import type { IContext, SubscribeResolveFn } from "./types";
 import type { SubscriptionSubscribeFunc } from "node_modules/type-graphql/build/typings/decorators/types";
 
@@ -43,7 +44,7 @@ function withFilter(
       throw(error: any) {
         return asyncIterator.throw!(error);
       },
-      [Symbol.asyncIterator]() {
+      [$$asyncIterator]() {
         return this;
       }
     } as any;
