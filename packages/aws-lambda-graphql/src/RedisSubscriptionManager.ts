@@ -10,11 +10,6 @@ import type {
 import { prefixRedisKey } from "./helpers";
 import { getRedisClient } from "./helpers/redis";
 
-// polyfill Symbol.asyncIterator
-if (Symbol.asyncIterator === undefined) {
-  (Symbol as any).asyncIterator = Symbol.for("asyncIterator");
-}
-
 interface RedisSubscriptionManagerOptions {
   /**
    * IORedis client instance

@@ -1,4 +1,4 @@
-import { createAsyncIterator } from "iterall";
+import { createAsyncIterator } from "./helpers/iterator";
 import type {
   IConnection,
   ISubscriber,
@@ -6,11 +6,6 @@ import type {
   ISubscriptionManager,
   OperationRequest
 } from "./types";
-
-// polyfill Symbol.asyncIterator
-if (Symbol.asyncIterator === undefined) {
-  (Symbol as any).asyncIterator = Symbol.for("asyncIterator");
-}
 
 interface MemorySubscriptionManagerOptions {
   /**

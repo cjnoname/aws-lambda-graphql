@@ -6,7 +6,6 @@ import type {
   Context as LambdaContext,
   Handler as LambdaHandler
 } from "aws-lambda";
-import { isAsyncIterable } from "iterall";
 import type { ExecutionResult } from "graphql";
 import { PubSub } from "graphql-subscriptions";
 import type {
@@ -29,6 +28,7 @@ import {
 import { formatMessage } from "./formatMessage";
 import type { ExecutionParams } from "./execute";
 import { execute } from "./execute";
+import { isAsyncIterableIterator } from "./helpers/iterator";
 
 type Options = Pick<
   ApolloServerOptions<any>,
@@ -488,7 +488,7 @@ export class WebSocketServer<TEventHandler extends LambdaHandler = any> {
             subscriptionManager: this.subscriptionManager
           });
 
-          if (!isAsyncIterable(result)) {
+          if (!isAsyncIterableIterator(result)) {
             // send response to client so it can finish operation in case of query or mutation
             if (onOperationComplete) {
               onOperationComplete(

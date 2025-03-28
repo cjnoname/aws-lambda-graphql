@@ -1,6 +1,4 @@
 import type { DynamoDBStreamHandler } from "aws-lambda";
-import { isAsyncIterable, getAsyncIterator } from "iterall";
-import { type ExecutionResult } from "graphql";
 import { ArrayPubSub } from "./ArrayPubSub";
 import type { IEventProcessor } from "./types";
 import { formatMessage } from "./formatMessage";
@@ -10,6 +8,7 @@ import type { WebSocketServer } from "./WebSocketServer";
 import type { IDynamoDBSubscriptionEvent } from "./DynamoDBEventStore";
 import { isTTLExpired } from "./helpers/isTTLExpired";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
+import { isAsyncIterableIterator } from "./helpers/iterator";
 
 interface DynamoDBEventProcessorOptions {
   onError?: (err: any) => void;
@@ -111,14 +110,14 @@ export class DynamoDBEventProcessor<TServer extends WebSocketServer = WebSocketS
                 registerSubscriptions: false
               });
 
-              if (!isAsyncIterable(iterable)) {
+              if (!isAsyncIterableIterator(iterable)) {
                 // something went wrong, probably there is an error
                 this.log("Execution result: non iterable", event);
                 return Promise.resolve();
               }
 
-              const iterator = getAsyncIterator(iterable);
-              const result: IteratorResult<ExecutionResult> = await iterator.next();
+              const iterator = iterable[Symbol.asyncIterator]();
+              const result = await iterator.next();
 
               if (result.value != null) {
                 if (this.debug) {

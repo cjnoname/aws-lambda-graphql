@@ -1,4 +1,4 @@
-import { createAsyncIterator } from "iterall";
+import { createAsyncIterator } from "../helpers/iterator";
 import { withFilter } from "../withFilter";
 
 describe("withFilter", () => {

@@ -1,7 +1,7 @@
-import { isAsyncIterable } from "iterall";
 import { PubSub as BasePubSub } from "graphql-subscriptions";
 import { PubSub } from "../PubSub";
-import { ISubscriptionManager, IConnectionManager } from "../types";
+import type { ISubscriptionManager, IConnectionManager } from "../types";
+import { isAsyncIterableIterator } from "../helpers/iterator";
 
 describe("PubSub", () => {
   const eventStore = {
@@ -37,7 +37,7 @@ describe("PubSub", () => {
         }
       });
 
-      expect(isAsyncIterable(iterator)).toBe(true);
+      expect(isAsyncIterableIterator(iterator)).toBe(true);
       expect(subscriptionManager.subscribe).toHaveBeenCalledWith(["test"], connection, operation);
     });
 

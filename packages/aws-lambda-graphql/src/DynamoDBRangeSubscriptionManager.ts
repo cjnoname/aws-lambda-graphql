@@ -17,11 +17,6 @@ import {
 
 const DEFAULT_TTL = 7200;
 
-// polyfill Symbol.asyncIterator
-if (Symbol.asyncIterator === undefined) {
-  (Symbol as any).asyncIterator = Symbol.for("asyncIterator");
-}
-
 interface DynamoDBSubscriber extends ISubscriber {
   /**
    * works as range key in DynamoDb (event is partition key)

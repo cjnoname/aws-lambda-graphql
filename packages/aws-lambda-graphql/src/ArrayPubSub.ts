@@ -1,4 +1,4 @@
-import { createAsyncIterator } from "iterall";
+import { createAsyncIterator } from "./helpers/iterator";
 import type { ISubscriptionEvent } from "./types";
 
 /**
@@ -32,7 +32,7 @@ export class ArrayPubSub {
     throw new Error("Please do not use this PubSub implementation");
   }
 
-  asyncIterator(eventNames: string | string[]) {
+  asyncIterableIterator(eventNames: string | string[]) {
     const names = Array.isArray(eventNames) ? eventNames : [eventNames];
 
     return createAsyncIterator(

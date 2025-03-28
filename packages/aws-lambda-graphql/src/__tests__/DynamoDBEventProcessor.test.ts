@@ -1,15 +1,15 @@
-import { DynamoDBRecord } from "aws-lambda";
+import type { DynamoDBRecord } from "aws-lambda";
 import { DynamoDB } from "aws-sdk";
 import { parse } from "graphql";
-import { $$asyncIterator, createAsyncIterator } from "iterall";
 import { formatMessage } from "../formatMessage";
 import { createSchema } from "../fixtures/schema";
 import { DynamoDBEventProcessor } from "../DynamoDBEventProcessor";
 import { SERVER_EVENT_TYPES } from "../protocol";
-import { ISubscriber } from "../types";
+import type { ISubscriber } from "../types";
 import { Server } from "../Server";
 import { PubSub } from "../PubSub";
 import { computeTTL } from "../helpers";
+import { createAsyncIterator } from "../helpers/iterator";
 
 const query = parse(/* GraphQL */ `
   subscription Test($authorId: ID) {
@@ -25,7 +25,7 @@ describe("DynamoDBEventProcessor", () => {
     };
     const subscriptionManager = {
       subscribersByEvent: jest.fn(() => ({
-        [$$asyncIterator]: () =>
+        [Symbol.asyncIterator]: () =>
           createAsyncIterator([
             [
               {
@@ -162,7 +162,7 @@ describe("DynamoDBEventProcessor", () => {
     };
     const subscriptionManager = {
       subscribersByEvent: jest.fn(() => ({
-        [$$asyncIterator]: () =>
+        [Symbol.asyncIterator]: () =>
           createAsyncIterator([
             [
               {
@@ -292,7 +292,7 @@ describe("DynamoDBEventProcessor", () => {
     };
     const subscriptionManager = {
       subscribersByEvent: jest.fn(() => ({
-        [$$asyncIterator]: () =>
+        [Symbol.asyncIterator]: () =>
           createAsyncIterator([
             [
               {
@@ -346,7 +346,7 @@ describe("DynamoDBEventProcessor", () => {
     };
     const subscriptionManager = {
       subscribersByEvent: jest.fn(() => ({
-        [$$asyncIterator]: () =>
+        [Symbol.asyncIterator]: () =>
           createAsyncIterator([
             [
               {
