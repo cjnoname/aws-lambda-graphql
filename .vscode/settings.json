@@ -40,5 +40,6 @@
     "titleBar.activeForeground": "#ffffff",
     "statusBar.background": "#515d5b",
     "statusBar.foreground": "#ffffff"
-  }
+  },
+  "cSpell.words": ["apigatewaymanagementapi", "ulidx"]
 }
